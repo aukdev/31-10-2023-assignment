@@ -9,8 +9,8 @@ import { defamativeFetch } from "../api/api";
 const TextChecking = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [comment, setComment] = useState("");
-  const [prediction, setPrediction] = useState("undefined");
-  const [error, setError] = useState(true);
+  const [prediction, setPrediction] = useState(undefined);
+  const [error, setError] = useState(false);
 
   // comment submit
   const commentSubmit = () => {

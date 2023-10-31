@@ -13,14 +13,14 @@ const inputs = {
   followers_count: "Followers Count",
   profile_link_color: "Profile Link Color",
   friends_count: "Friends Count",
-  account_created_date: "Account Created Date",
 };
 
 const inputDataKeys = Object.keys(inputs);
 
 const ProfileDetection = () => {
-  const [prediction, setPrediction] = useState("real");
+  const [prediction, setPrediction] = useState(undefined);
   const [inputData, setInputData] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
 
   //   input onchange
   const inputChange = (key, value) => {
@@ -36,10 +36,17 @@ const ProfileDetection = () => {
 
   //   data submit
   const dataSubmit = () => {
-    identificationFetch(inputData).then((res) => {
-      const { prediction } = res;
-      setPrediction(prediction);
-    });
+    setIsSubmit(true);
+    identificationFetch(inputData)
+      .then((res) => {
+        const { prediction } = res;
+        setPrediction(prediction);
+        setIsSubmit(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsSubmit(false);
+      });
     // console.log(inputData);
   };
 
@@ -69,14 +76,21 @@ const ProfileDetection = () => {
         </div>
         <div className=" w-full flex flex-col items-center">
           <button
+            disabled={isSubmit}
             onClick={dataSubmit}
-            className=" bg-blue-600 mt-14 py-1 px-9 rounded-md text-white font-semibold"
+            className=" bg-blue-600 disabled:bg-blue-400 mt-14 py-1 px-9 rounded-md text-white font-semibold"
           >
             Submit
           </button>
           {prediction === undefined ? (
-            <p className=" mt-5 text-sm font-semibold">
-              Your Bot Profile Status will show here
+            <p
+              className={` mt-5 text-sm font-semibold ${
+                isSubmit && "text-blue-600"
+              }`}
+            >
+              {isSubmit
+                ? "Please wait... We’re checking your text"
+                : "Your Bot Profile Status will show here"}
             </p>
           ) : (
             <div className=" mt-5 flex items-center">
