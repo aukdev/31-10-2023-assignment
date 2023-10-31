@@ -37,7 +37,15 @@ const ProfileDetection = () => {
   //   data submit
   const dataSubmit = () => {
     setIsSubmit(true);
-    identificationFetch(inputData)
+
+    const data = { ...inputData };
+    data["statuses_count"] = Number(inputData["statuses_count"]);
+    data["followers_count"] = Number(inputData["followers_count"]);
+    data["friends_count"] = Number(inputData["friends_count"]);
+    data["favourites_count"] = Number(inputData["favourites_count"]);
+    data["listed_count"] = Number(inputData["listed_count"]);
+
+    identificationFetch(data)
       .then((res) => {
         const { prediction } = res;
         setPrediction(prediction);
@@ -47,7 +55,7 @@ const ProfileDetection = () => {
         console.log(err);
         setIsSubmit(false);
       });
-    // console.log(inputData);
+    console.log(data);
   };
 
   return (
@@ -94,14 +102,14 @@ const ProfileDetection = () => {
             </p>
           ) : (
             <div className=" mt-5 flex items-center">
-              {prediction === "real" ? (
+              {prediction === "REAL" ? (
                 <AiOutlineCheckCircle className=" text-lg text-green-600" />
               ) : (
                 <AiOutlineCloseCircle className=" text-lg text-red-600" />
               )}
               <p
                 className={` text-sm ml-1 font-bold ${
-                  prediction === "real" ? "text-green-600" : "text-red-600"
+                  prediction === "REAL" ? "text-green-600" : "text-red-600"
                 }`}
               >
                 {`${prediction}`.toUpperCase()}
